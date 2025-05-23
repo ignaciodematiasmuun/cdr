@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ecosistemas Limpios</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <style>
+    :root {
+      --primary: #2d6a4f;
+      --accent: #40916c;
+      --bg-light: #f4fef7;
+      --bg-white: #ffffff;
+      --text-dark: #1b4332;
+      --text-light: #ffffff;
+    }
+    body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: var(--bg-light);
+  color: var(--text-dark);
+  line-height: 1.6;
+}
+
+header {
+  background: linear-gradient(120deg, var(--primary), #52b788);
+  color: var(--text-light);
+  text-align: center;
+  padding: 3rem 2rem;
+}
+
+nav {
+  display: flex;
+  justify-content: center;
+  background-color: var(--accent);
+  padding: 1rem;
+  gap: 1.5rem;
+}
+
+nav a {
+  color: var(--text-light);
+  text-decoration: none;
+  font-weight: 600;
+  text-transform: uppercase;
+  transition: color 0.3s ease;
+}
+
+nav a:hover {
+  color: #d8f3dc;
+}
+
+section {
+  padding: 3rem 1.5rem;
+  max-width: 1100px;
+  margin: auto;
+}
+
+h2 {
+  border-bottom: 2px solid var(--accent);
+  padding-bottom: 0.3rem;
+}
+
+.highlight {
+  background-color: #d8f3dc;
+  border-left: 6px solid var(--accent);
+  padding: 1rem;
+  margin-top: 2rem;
+  font-weight: bold;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.stat {
+  background: var(--bg-white);
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.stat h3 {
+  font-size: 2.2rem;
+  color: var(--accent);
+}
+
+.formulario, .logos-container {
+  background: var(--bg-white);
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  margin-top: 2rem;
+}
+
+label {
+  display: block;
+  margin: 1rem 0 0.5rem;
+  font-weight: 600;
+}
+
+input, select, textarea {
+  width: 100%;
+  padding: 0.8rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+}
+
+button {
+  background-color: var(--accent);
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #2d6a4f;
+}
+
+.logo-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.logo-grid img {
+  max-width: 120px;
+  max-height: 80px;
+  object-fit: contain;
+  filter: grayscale(100%);
+  transition: filter 0.3s ease;
+}
+
+.logo-grid img:hover {
+  filter: none;
+}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Ecosistemas Limpios</h1>
+    <p>Unidos por la limpieza y restauración de nuestros ecosistemas</p>
+  </header>
+
+  <nav>
+    <a href="#inicio">Inicio</a>
+    <a href="#impacto">Impacto</a>
+    <a href="#jornadas">Jornadas</a>
+    <a href="#participa">Participá</a>
+    <a href="#contacto">Contacto</a>
+  </nav>
+
+  <section id="inicio">
+    <h2>¿Qué es Ecosistemas Limpios?</h2>
+    <p>
+      Ecosistemas Limpios es una red colaborativa de empresas, gobiernos y ciudadanía que
+      organiza jornadas de limpieza y regeneración en distintos ecosistemas del país:
+      costas, bosques, humedales y montañas.
+    </p>
+    <div class="highlight">
+      <strong id="resumen">¡Ya sumamos más de 0 voluntarios y 0 kg de residuos recolectados!</strong>
+    </div>
+  </section>
+
+  <section id="impacto">
+    <h2>Nuestro impacto</h2>
+    <div class="stats">
+      <div class="stat"><h3 id="voluntariosContador">0</h3><p>Voluntarios</p></div>
+      <div class="stat"><h3 id="jornadasContador">0</h3><p>Jornadas realizadas</p></div>
+      <div class="stat"><h3 id="residuosContador">0 kg</h3><p>Residuos recolectados</p></div>
+      <div class="stat"><h3 id="provinciasContador">0</h3><p>Provincias involucradas</p></div>
+    </div>
+  </section>
+
+  <section id="mapa">
+    <h2>Mapa de Jornadas</h2>
+    <div id="map" style="height: 400px; border-radius: 12px; margin: 2rem 0;"></div>
+  </section>
+  <!-- ... contenido HTML conservado, con los errores eliminados ... -->
+  <section class="formulario">
+    <h2>Cargar nueva jornada</h2>
+    <label>Provincia:
+      <select>
+        <option>Buenos Aires</option><option>CABA</option><option>Córdoba</option>
+        <option>Santa Fe</option><option>Mendoza</option><option>Tucumán</option>
+        <option>Entre Ríos</option><option>Salta</option><option>Neuquén</option>
+        <option>Río Negro</option><option>Chubut</option><option>San Luis</option>
+        <option>Misiones</option><option>Formosa</option><option>Jujuy</option>
+        <option>Catamarca</option><option>Corrientes</option><option>Chaco</option>
+        <option>La Pampa</option><option>San Juan</option><option>Santiago del Estero</option>
+        <option>La Rioja</option><option>Santa Cruz</option><option>Tierra del Fuego</option>
+      </select>
+    </label>
+    <label>Dirección:</label>
+    <input type="text" placeholder="Ej. Av. Siempreviva 123, San Miguel de Tucumán" />
+
+    <label>Fecha:</label>
+    <input type="date" />
+
+    <label>Voluntarios participantes:</label>
+    <input type="number" />
+
+    <label>Instituciones participantes:</label>
+    <textarea placeholder="Escriba los nombres separados por coma"></textarea>
+
+    <label>Logo de la institución organizadora (URL de imagen):</label>
+    <input type="text" placeholder="https://..." />
+
+    <label>Tipo de ecosistema:</label>
+    <select>
+      <option>Playas arenosas</option><option>Playas rocosas y acantilados</option>
+      <option>Dunas costeras</option><option>Marismas y humedales costeros</option>
+      <option>Estuarios y desembocaduras de ríos</option><option>Cuerpos de agua interiores</option>
+      <option>Riberas de ríos y arroyos</option><option>Puertos</option>
+      <option>Montaña</option><option>Sierras</option>
+    </select>
+
+    <label>Fotos de la jornada:</label>
+    <div id="foto-container">
+      <input type="text" placeholder="URL de la foto" />
+    </div>
+    <button type="button" onclick="agregarFoto()">Cargar otra foto</button>
+
+    <label>Residuos recolectados por tipo:</label>
+    <div id="residuos-container">
+      <div class="residuo-entry">
+        <select class="residuo-tipo">
+          <option>Vidrio</option><option>Metal</option><option>Papel y Cartón</option>
+          <option>Madera Procesada</option><option>Textiles</option><option>Goma</option>
+          <option>Higiene y Sanitarios</option><option>Construcción y Demolición (RCD)</option>
+          <option>Peligrosos y Especiales</option><option>Otro</option>
+        </select>
+        <input type="number" class="residuo-kilos" placeholder="Cantidad en kilos" />
+      </div>
+    </div>
+    <button type="button" onclick="agregarResiduo()">Agregar otro tipo de residuo</button>
+
+    <button type="button" onclick="cargarJornada()">Cargar jornada</button>
+  </section>
+
+<section class="logos-container">
+  <h2>Nos acompañan</h2>
+  <div class="logo-grid">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/UNESCO_logo.svg/200px-UNESCO_logo.svg.png" alt="UNESCO">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/UNEP_logo_English.svg/200px-UNEP_logo_English.svg.png" alt="PNUMA">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Logo_Ministerio_de_Ambiente_y_Desarrollo_Sostenible_de_Argentina.svg/200px-Logo_Ministerio_de_Ambiente_y_Desarrollo_Sostenible_de_Argentina.svg.png" alt="MAyDS Argentina">
+  </div>
+</section>
+
+  <script>
+    const map = L.map('map').setView([-38.4161, -63.6167], 4.5);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    function agregarFoto() {
+      const container = document.getElementById('foto-container');
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.placeholder = 'URL de la foto';
+      container.appendChild(input);
+    }
+
+    function agregarResiduo() {
+      const container = document.getElementById('residuos-container');
+      const entry = document.createElement('div');
+      entry.className = 'residuo-entry';
+      entry.innerHTML = `
+        <select class="residuo-tipo">
+          <option>Vidrio</option><option>Metal</option><option>Papel y Cartón</option>
+          <option>Madera Procesada</option><option>Textiles</option><option>Goma</option>
+          <option>Higiene y Sanitarios</option><option>Construcción y Demolición (RCD)</option>
+          <option>Peligrosos y Especiales</option><option>Otro</option>
+        </select>
+        <input type="number" class="residuo-kilos" placeholder="Cantidad en kilos" />
+      `;
+      container.appendChild(entry);
+    }
+
+    let totalVoluntarios = 0;
+let totalResiduos = 0;
+let totalJornadas = 0;
+
+function cargarJornada() {
+      const direccion = document.querySelector('input[placeholder*="Siempreviva"]').value;
+      const voluntarios = document.querySelector('input[type="number"]').value;
+      const instituciones = document.querySelector('textarea').value;
+      const fotos = Array.from(document.querySelectorAll('#foto-container input')).map(el => el.value).filter(Boolean);
+      const residuos = Array.from(document.querySelectorAll('.residuo-entry')).map(el => {
+        const tipo = el.querySelector('select').value;
+        const kilos = el.querySelector('input').value;
+        return `${tipo}: ${kilos} kg`;
+      }).join('<br>');
+
+      if (!direccion) {
+        alert("Por favor, ingresá una dirección válida.");
+        return;
+      }
+
+      const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(direccion + ', Argentina')}`;
+
+      fetch(url)
+        .then(response => response.json())
+        .then(data => {
+          if (data && data.length > 0) {
+            const lat = parseFloat(data[0].lat);
+            const lon = parseFloat(data[0].lon);
+
+            const popupContent = `
+              <strong>Dirección:</strong> ${direccion}<br>
+              <strong>Voluntarios:</strong> ${voluntarios}<br>
+              <strong>Instituciones:</strong> ${instituciones}<br>
+              <strong>Residuos:</strong><br>${residuos}<br>
+              ${fotos.map(src => `<img src="${src}" style="max-width:100px; display:block; margin:4px 0;">`).join('')}
+            `;
+
+            L.marker([lat, lon]).addTo(map)
+              .bindPopup(popupContent)
+              .openPopup();
+
+            map.setView([lat, lon], 13);
+
+            totalVoluntarios += parseInt(voluntarios) || 0;
+            totalJornadas += 1;
+            const kilosTotales = Array.from(document.querySelectorAll('.residuo-kilos'))
+              .map(k => parseFloat(k.value) || 0)
+              .reduce((a, b) => a + b, 0);
+            totalResiduos += kilosTotales;
+
+            document.getElementById('voluntariosContador').textContent = totalVoluntarios;
+            document.getElementById('jornadasContador').textContent = totalJornadas;
+            document.getElementById('residuosContador').textContent = `${totalResiduos} kg`;
+            document.getElementById('resumen').textContent = `¡Ya sumamos más de ${totalVoluntarios} voluntarios y ${totalResiduos} kg de residuos recolectados!`;
+          } else {
+            alert("No se pudo encontrar la ubicación. Verificá la dirección.");
+          }
+        })
+        .catch(error => {
+          console.error("Error al buscar la dirección:", error);
+          alert("Hubo un error al intentar ubicar la jornada. Intentalo más tarde.");
+        });
+    }
+  </script>
+</body>
+</html>
